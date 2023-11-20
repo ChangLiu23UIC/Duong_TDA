@@ -1,6 +1,7 @@
 import pandas as pd
 import gudhi as gd
 from collections import defaultdict
+from sklearn.cluster import DBSCAN
 
 
 def read_dataset(filename):
@@ -37,9 +38,11 @@ def pcd_dict_df(dataset):
 '''
 Create the list of persistence diagram for clustering
 '''
+
+
 def persistence_analysis(point_clouds: dict):
     persistence_diagrams = [gd.RipsComplex(points=pc).create_simplex_tree(max_dimension=2).persistence() for pc in
-                            point_clouds]
+                            point_clouds.values()]
     return persistence_diagrams
 
 
@@ -49,3 +52,4 @@ if __name__ == '__main__':
     test_pcd = pcd_dict_df(test_in)
     train_pcd = pcd_dict_df(train_in)
     combined_pcd = test_pcd | train_pcd
+    persistence = persistence_analysis(combined_pcd)
